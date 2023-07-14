@@ -216,3 +216,9 @@ botframework.com
 mshome.net
 officeppe.com
 github.io
+dc-msedge.net
+bingforbusiness.com
+cbecloud.com
+akadns.net
+akadns6.net
+xboxab.com
