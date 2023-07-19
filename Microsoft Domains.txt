@@ -223,3 +223,7 @@ akadns.net
 akadns6.net
 xboxab.com
 azurelbs.com
+azurecontainer.io
+azurecr.io
+cloudapp.net
+azure-api.net
