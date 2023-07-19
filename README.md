@@ -24,6 +24,8 @@ The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/action
 
 * https://learn.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges?view=o365-worldwide
 
+* https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-domains
+
 <br>
 
 ## Contributing
