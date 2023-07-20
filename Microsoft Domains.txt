@@ -224,3 +224,4 @@ akadns6.net
 xboxab.com
 azurelbs.com
 azurecontainer.io
+loganalytics.io
