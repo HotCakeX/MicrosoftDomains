@@ -225,3 +225,4 @@ xboxab.com
 azurelbs.com
 azurecontainer.io
 loganalytics.io
+applicationinsights.io
