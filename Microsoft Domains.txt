@@ -226,3 +226,4 @@ azurelbs.com
 azurecontainer.io
 loganalytics.io
 applicationinsights.io
+azure-automation.net
