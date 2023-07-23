@@ -228,3 +228,4 @@ loganalytics.io
 applicationinsights.io
 azure-automation.net
 msftstatic.com
+microsofttranslator.com
