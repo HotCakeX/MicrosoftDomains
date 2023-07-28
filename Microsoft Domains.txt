@@ -231,3 +231,4 @@ msftstatic.com
 microsofttranslator.com
 b-msedge.net
 live.net
+gh.io
