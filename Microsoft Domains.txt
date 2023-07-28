@@ -232,3 +232,4 @@ microsofttranslator.com
 b-msedge.net
 live.net
 gh.io
+windowsphone.com
