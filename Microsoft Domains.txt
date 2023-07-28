@@ -233,3 +233,5 @@ b-msedge.net
 live.net
 gh.io
 windowsphone.com
+lync.com
+msocdn.com
