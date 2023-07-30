@@ -235,5 +235,3 @@ gh.io
 windowsphone.com
 lync.com
 callofduty.com
-activision.com
-bethesda.net
