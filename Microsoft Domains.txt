@@ -235,4 +235,3 @@ gh.io
 windowsphone.com
 lync.com
 callofduty.com
-vsassets.io
