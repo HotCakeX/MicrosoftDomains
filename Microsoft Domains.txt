@@ -235,3 +235,5 @@ gh.io
 windowsphone.com
 lync.com
 callofduty.com
+bingviz.com
+microsoftapp.net
