@@ -1,6 +1,6 @@
-# MicrosoftDomains
+# Microsoft Domains
 
-This repository lists all active Microsoft domains | no URLs and no sub-domains | for the purpose of Whitelisting in various systems and apps
+This repository lists all active Microsoft root domains, no URLs and no sub-domains, for the purpose of Whitelisting in various systems and apps.
 
 This repository can facilitate the implementation of strict host-based firewall rules, for example, in a corporate environment.
 
@@ -9,6 +9,19 @@ It can be used to apply aggressive adblocking capabilities to your network, for 
 The reason sub-domains and URLs aren't being used is that for Whitelisting we use root domain with wildcard `*`.
 
 For example, `[*.]microsoft.com` or `[*]microsoft.com` (depending of the format your service/app supports) will allow all sub-domains and URLs under microsoft.com. This is the most efficient and maintainable way to Whitelist domains.
+
+<br>
+
+## How to use NextDNS API in PowerShell for Live Logs
+
+NextDNS supports [Server-sent events (or SSE)](https://nextdns.github.io/api/#streaming), we can use it to view live stream of the logs in PowerShell, they are in JSON format.
+
+In this [directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextDNS%20API) you will find the PowerShell scripts. Use the `Stream the logs - Customized Output.ps1` script to automatically:
+
+1. Detect Microsoft root domains using common patterns
+2. Store unique Microsoft domains that were blocked in a separate list
+3. Store unique Microsoft domains that were not in the whitelist file in a separate list
+4. Display Allowed and Blocked domains on the console
 
 <br>
 
@@ -29,7 +42,9 @@ The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/action
 
 ## Contributing
 
-Please feel free to contribute to this repository by creating a pull request. Make sure the domain you're adding:
+Please feel free to contribute to this repository by creating a pull request for PowerShell scripts or domains.
+
+### If you're adding a domain, make sure it:
 
 1. Doesn't redirect to another domain
 2. Is active and not deprecated
