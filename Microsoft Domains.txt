@@ -237,3 +237,4 @@ lync.com
 callofduty.com
 bingviz.com
 msftedu.com
+microsoftedgeinsider.com
