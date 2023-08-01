@@ -236,3 +236,4 @@ windowsphone.com
 lync.com
 callofduty.com
 bingviz.com
+msftedu.com
