@@ -239,3 +239,5 @@ bingviz.com
 msftedu.com
 microsoftedgeinsider.com
 bingparachute.com
+adnxs-simple.com
+nuance.com
