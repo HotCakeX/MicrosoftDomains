@@ -68,8 +68,8 @@ try {
     # This is an object that can read data from a stream, such as the response stream, and convert it to text
     $StreamReader = [System.IO.StreamReader]::new($ResponseStream)
 
-
-    while (-not $StreamReader.EndOfStream) {
+    # while (-not $StreamReader.EndOfStream) {
+    while ($true) {
         # Read one line from the stream
         # This is a way of getting one line of text from the stream reader object, which corresponds to one event from the server
         $Line = $StreamReader.ReadLine()
