@@ -8,6 +8,11 @@ if (-NOT (Test-Path .\MicrosoftPossibleBlocked.txt)) {
     New-Item -ItemType File -Path .\MicrosoftPossibleBlocked.txt -Force | Out-Null
 }
 
+# Make a new file to store all of the domains that were connected to, no duplicates
+if (-NOT (Test-Path .\AllDomains.txt)) {
+    New-Item -ItemType File -Path .\AllDomains.txt -Force | Out-Null
+}
+
 # Try to loop through the stream and process each line as a JSON object
 # Use -ErrorAction Stop to report errors as exceptions
 try {
@@ -107,13 +112,34 @@ try {
                     # This is a way of filtering the hashtable and getting only the properties that you want, such as timestamp, domain, root, encrypted, protocol, clientIp, status. We use the Select-Object cmdlet with the property names to do this.
                     # $Log = $Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table
               
+                    # Making sure the root in the log is actually the root domain and not a sub-domain
+                    # Sometimes it identifies sub-domains as root domains, so here we make sure it doesn't happen
+                    # first see if the root domain has more than 1 dot in it, indicating that it contains sub-domains
+                    if ($Log.root -like '*.*.*') {
+                        # Define a regex pattern that starting from the end, captures everything until the 2nd dot
+                        if ($Log.root -match '(?s).*\.(.+?\..+?)$') {
+                            
+                            $rootDomain = $matches[1]
+
+                            Write-Host "$rootDomain is Regex cleared" -ForegroundColor Yellow
+                        }
+                    }
+
+                    # if the root domain doesn't have more than 1 dot then no need to change it, assign it as is
+                    else {
+                        $rootDomain = $Log.root
+
+                        Write-Host "$rootDomain is OK" -ForegroundColor Magenta
+                    }
+                       
+
                     # If the root domain's name resembles Microsoft domain names
-                    if ($Log.root -like "*msft*" `
-                            -or $Log.root -like "*microsoft*" `
-                            -or $Log.root -like "*bing*" `
-                            -or $Log.root -like "*xbox*" `
-                            -or $Log.root -like "*azure*" `
-                            -or $Log.root -like "*.ms*" 
+                    if ($rootDomain -like "*msft*" `
+                            -or $rootDomain -like "*microsoft*" `
+                            -or $rootDomain -like "*bing*" `
+                            -or $rootDomain -like "*xbox*" `
+                            -or $rootDomain -like "*azure*" `
+                            -or $rootDomain -like "*.ms*" 
                     ) {
                         # If the domain was blocked
                         if ($Log.status -eq 'blocked') {
@@ -122,25 +148,25 @@ try {
                             $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table) 
 
                             # Make sure the domain isn't already available in the file
-                            $CurrentItems = Get-Content -Path '.\MicrosoftPossibleBlocked.txt'
+                            $CurrentItemsMicrosoft = Get-Content -Path '.\MicrosoftPossibleBlocked.txt'
 
                             # Add the Blocked domain to the MicrosoftPossibleBlocked.txt list for later review
-                            if ($Log.root -notin $CurrentItems) {
-                                Add-Content -Value $Log.root -Path '.\MicrosoftPossibleBlocked.txt'
+                            if ($rootDomain -notin $CurrentItemsMicrosoft) {
+                                Add-Content -Value $rootDomain -Path '.\MicrosoftPossibleBlocked.txt'
                             }
                         }
                         # If the domain was not blocked but also wasn't in the Microsoft domains Whitelist                     
-                        elseif ($Log.root -notin $WhiteListedDomains) {                    
+                        elseif ($rootDomain -notin $WhiteListedDomains) {                    
                             # Display it with cyan text on the host
                             Write-Host "Microsoft Domain Not Whitelisted" -ForegroundColor Cyan
                             $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
                
                             # Make sure the domain isn't already available in the NotWhitelisted.Txt file
-                            $CurrentItems = Get-Content -Path '.\NotWhitelisted.txt'
+                            $CurrentItemsNotWhitelisted = Get-Content -Path '.\NotWhitelisted.txt'
 
                             # Add the detected domain to the NotWhitelisted.Txt list for later review
-                            if ($Log.root -notin $CurrentItems) {
-                                Add-Content -Value $Log.root -Path '.\NotWhitelisted.txt'
+                            if ($rootDomain -notin $CurrentItemsNotWhitelisted) {
+                                Add-Content -Value $rootDomain -Path '.\NotWhitelisted.txt'
                             }
                         }
                         else {
@@ -157,8 +183,20 @@ try {
                     # Display any allowed domain with green text on the host
                     else {                        
                         Write-Host "Allowed" -ForegroundColor Green
-                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)             
-                    }  
+                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table) 
+                        
+                        # if the domain is neither blocked, belongs to Microsoft nor is it in the whitelisted domains list
+                        if ($rootDomain -notin $WhiteListedDomains) {
+
+                            # Get the content of the .\AllDomains.txt
+                            $CurrentItemsAllDomains = Get-Content -Path '.\AllDomains.txt'
+
+                            # Add the domain to .\AllDomains.txt , make sure it's unique and not already in the list
+                            if ($rootDomain -notin $CurrentItemsAllDomains) {
+                                Add-Content -Value $rootDomain -Path '.\AllDomains.txt'
+                            }
+                        }
+                    }                     
                 }
             }
         }
