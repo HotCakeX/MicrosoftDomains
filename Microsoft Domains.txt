@@ -243,3 +243,4 @@ adnxs-simple.com
 nuance.com
 outlook.com
 microsoftemail.com
+nuget.org
