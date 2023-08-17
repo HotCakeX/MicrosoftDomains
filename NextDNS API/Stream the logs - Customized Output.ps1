@@ -18,13 +18,13 @@ if (-NOT (Test-Path .\AllDomains.txt)) {
 try {
 
     # Read the Whitelisted Domains
-    $WhiteListedDomains = Get-Content -Path "E:\Cloned Repositories\MicrosoftDomains\Microsoft Domains.txt"
+    $WhiteListedDomains = Get-Content -Path '.\Microsoft Domains.txt'
 
     # Define the API key and the profile ID
     # These are the credentials that you need to access the NextDNS API
     # Get your API key from here: https://my.nextdns.io/account
-    $ApiKey = ""
-    $ProfileId = ""
+    $ApiKey = ''
+    $ProfileId = ''
 
     # Define the URL for streaming the logs
     # This is the endpoint that you need to send a web request to get the logs as a SSE stream
@@ -34,7 +34,7 @@ try {
     # Create a header with the API key as a hashtable
     # This is a key-value pair that you need to include in the web request to authenticate yourself
     $Header = @{
-        "X-Api-Key" = $ApiKey
+        'X-Api-Key' = $ApiKey
     }
 
 
@@ -134,17 +134,17 @@ try {
                        
 
                     # If the root domain's name resembles Microsoft domain names
-                    if ($rootDomain -like "*msft*" `
-                            -or $rootDomain -like "*microsoft*" `
-                            -or $rootDomain -like "*bing*" `
-                            -or $rootDomain -like "*xbox*" `
-                            -or $rootDomain -like "*azure*" `
-                            -or $rootDomain -like "*.ms*" 
+                    if ($rootDomain -like '*msft*' `
+                            -or $rootDomain -like '*microsoft*' `
+                            -or $rootDomain -like '*bing*' `
+                            -or $rootDomain -like '*xbox*' `
+                            -or $rootDomain -like '*azure*' `
+                            -or $rootDomain -like '*.ms*' 
                     ) {
                         # If the domain was blocked
                         if ($Log.status -eq 'blocked') {
                             # Display it with yellow text on the host
-                            Write-Host "Microsoft BLOCKED" -ForegroundColor Yellow
+                            Write-Host 'Microsoft BLOCKED' -ForegroundColor Yellow
                             $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table) 
 
                             # Make sure the domain isn't already available in the file
@@ -158,7 +158,7 @@ try {
                         # If the domain was not blocked but also wasn't in the Microsoft domains Whitelist                     
                         elseif ($rootDomain -notin $WhiteListedDomains) {                    
                             # Display it with cyan text on the host
-                            Write-Host "Microsoft Domain Not Whitelisted" -ForegroundColor Cyan
+                            Write-Host 'Microsoft Domain Not Whitelisted' -ForegroundColor Cyan
                             $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
                
                             # Make sure the domain isn't already available in the NotWhitelisted.Txt file
@@ -171,18 +171,18 @@ try {
                         }
                         else {
                             # Display the allowed Microsoft domain with green text on the host
-                            Write-Host "Allowed" -ForegroundColor Green
+                            Write-Host 'Allowed' -ForegroundColor Green
                             $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)  
                         }
                     }
                     # Display any blocked domain with red text on the host
                     elseif ($Log.status -eq 'blocked') {
-                        Write-Host "BLOCKED" -ForegroundColor Red
+                        Write-Host 'BLOCKED' -ForegroundColor Red
                         $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)        
                     }
                     # Display any allowed domain with green text on the host
                     else {                        
-                        Write-Host "Allowed" -ForegroundColor Green
+                        Write-Host 'Allowed' -ForegroundColor Green
                         $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table) 
                         
                         # if the domain is neither blocked, belongs to Microsoft nor is it in the whitelisted domains list
@@ -208,7 +208,8 @@ catch {
     Write-Error "An error occurred while reading from the stream: $_"
 
     # Restart the script using $PSCommandPath and &
-    Write-Host "Restarting script..."
+    Write-Host 'Restarting the script in 3 seconds...' -ForegroundColor Yellow
+    Start-Sleep -Seconds 3
     & $PSCommandPath
 }
 finally {

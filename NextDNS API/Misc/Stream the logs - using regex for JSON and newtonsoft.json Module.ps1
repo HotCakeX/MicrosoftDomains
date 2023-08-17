@@ -1,6 +1,6 @@
 # Define the API key and the profile ID
-$apiKey = ""
-$profileId = ""
+$apiKey = ''
+$profileId = ''
 
 # Define the URL for streaming the logs
 # https://nextdns.github.io/api/#streaming
@@ -8,7 +8,7 @@ $url = "https://api.nextdns.io/profiles/$profileId/logs/stream"
 
 # Create a header with the API key as a hashtable
 $header = @{
-    "X-Api-Key" = $apiKey
+    'X-Api-Key' = $apiKey
 }
 
 # Create an empty NameValueCollection
@@ -44,7 +44,7 @@ Import-Module newtonsoft.json
 # Define a custom function to test the JSON validity
 function Test-JsonCustom {
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$Json
     )
 

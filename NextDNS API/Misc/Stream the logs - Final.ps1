@@ -1,7 +1,7 @@
 # Define the API key and the profile ID
 # These are the credentials that you need to access the NextDNS API
-$apiKey = ""
-$profileId = ""
+$apiKey = ''
+$profileId = ''
 
 # Define the URL for streaming the logs
 # This is the endpoint that you need to send a web request to get the logs as a SSE stream
@@ -11,7 +11,7 @@ $url = "https://api.nextdns.io/profiles/$profileId/logs/stream"
 # Create a header with the API key as a hashtable
 # This is a key-value pair that you need to include in the web request to authenticate yourself
 $header = @{
-    "X-Api-Key" = $apiKey
+    'X-Api-Key' = $apiKey
 }
 
 # Create an empty NameValueCollection
