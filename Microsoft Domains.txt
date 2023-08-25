@@ -245,3 +245,4 @@ outlook.com
 microsoftemail.com
 nuget.org
 sysinternals.com
+msft.it
