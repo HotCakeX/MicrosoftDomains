@@ -16,7 +16,7 @@ For example, `[*.]microsoft.com` or `[*]microsoft.com` (depending of the format 
 
 NextDNS supports [Server-sent events (or SSE)](https://nextdns.github.io/api/#streaming), we can use it to view live stream of the logs in PowerShell, they are in JSON format.
 
-In this [directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextDNS%20API) you will find the PowerShell scripts. Use the `Stream the logs - Customized Output.ps1` script to automatically:
+In this [directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextDNS%20API) you will find the PowerShell scripts. Use the `Stream the logs - Customized Output for Microsoft.ps1` script to automatically:
 
 1. Detect Microsoft root domains using common patterns
 2. Store unique Microsoft domains that were blocked in a separate list
