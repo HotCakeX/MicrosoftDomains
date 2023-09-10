@@ -21,7 +21,9 @@ In this [directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextD
 1. Detect Microsoft root domains using common patterns
 2. Store unique Microsoft domains that were blocked in a separate list
 3. Store unique Microsoft domains that were not in the whitelist file in a separate list
-4. Display Allowed and Blocked domains on the console
+4. Store unique Non-Microsoft domains in a separate list
+5. Store unique Non-Microsoft domains with the number of times they were visited in a separate list
+6. Display Allowed and Blocked domains on the console
 
 <br>
 
