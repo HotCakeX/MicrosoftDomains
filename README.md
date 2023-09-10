@@ -18,7 +18,7 @@ NextDNS supports [Server-sent events (or SSE)](https://nextdns.github.io/api/#st
 
 In this [directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextDNS%20API) you will find the PowerShell scripts. Use the `Stream the logs - Customized Output for Microsoft.ps1` script to automatically:
 
-1. Detect Microsoft root domains using common patterns
+1. Detect Microsoft root domains using common patterns (You can apply any other patterns for different purposes)
 2. Store unique Microsoft domains that were blocked in a separate list
 3. Store unique Microsoft domains that were not in the whitelist file in a separate list
 4. Store unique Non-Microsoft domains in a separate list
