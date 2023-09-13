@@ -214,7 +214,7 @@ try {
                             else {
                                 # Add it to the hashtable with a count of one
                                 $DomainCount.Add($RootDomain, 1)
-                            }
+                            }      
 
                             # Convert the hashtable to a JSON string and write it to .\AllDomainsCount.txt
                             $DomainCount | ConvertTo-Json | Set-Content -Path '.\AllDomainsCount.txt'
@@ -230,17 +230,25 @@ catch {
     Write-Error "An error occurred while reading from the stream: $_"
     
     # Add cool down timer for restarting the script
-    if ($global:WaitSeconds -ge 10) {
-        $global:WaitSeconds = 1
+
+    # If it's the first time error is thrown
+    if (!$global:WaitSeconds) {
+        $global:WaitSeconds = 3 
     }
+    # if it's not the first time error is thrown
     else {
-        $global:WaitSeconds += 1
+        if ($global:WaitSeconds -ge 15) {
+            $global:WaitSeconds = 3
+        }
+        else {
+            $global:WaitSeconds += 1
+        }
     }
 	
     Write-Warning -Message "Restarting the script in $global:WaitSeconds seconds..."
 	    
     Start-Sleep -Seconds $global:WaitSeconds
-	
+ 
     # Restart using & operator - Runs the script again using its path
     & $PSCommandPath
 
