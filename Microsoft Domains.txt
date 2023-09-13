@@ -249,3 +249,7 @@ msft.it
 officeppe.net
 msappproxy.net
 devtunnels.ms
+office-int.net
+microsoft.scloud
+office-int.com
+microsoft-int.com
