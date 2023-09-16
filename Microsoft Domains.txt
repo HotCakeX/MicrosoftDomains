@@ -254,3 +254,4 @@ microsoft.scloud
 office-int.com
 microsoft-int.com
 microsoft-tst.com
+bing.cn
