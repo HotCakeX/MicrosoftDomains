@@ -264,3 +264,4 @@ trafficmanager.cn
 chinacloudapi.cn
 usgovtrafficmanager.net
 windowsazure.us
+azurewebsite.net
