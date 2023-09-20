@@ -128,34 +128,31 @@ try {
                     # first see if the root domain has more than 1 dot in it, indicating that it contains sub-domains
                     if ($Log.root -like '*.*.*') {
                         # Define a regex pattern that starts from the end (rightmost side), captures everything until the 2nd dot (goes towards the left)
-                        if ($Log.root -match '(?s).*\.(.+?\..+?)$') {
-                    
-                            # Assign the regex matches to a custom variable because there will be a 2nd $matches variable later and we don't want it to be overwritten
-                            $Possibility = $matches
+                        if ($Log.root -match '(?<BadRoot>(?s).*\.(?<RealRoot>.+?\..+?)$)') {
                     
                             # If NextDNS didn't properly provide the correct root domain, check if it contains any of these sub-TLDs
                             # If it does then select the entire string
-                            if ($Possibility[1] -match '(?<SubTLD>co|ac|com|uk|eu|app|org|net)[.](?<TLD>.*)$') {
+                            if ($Matches.BadRoot -match '(?<SubTLD>co|ac|com|uk|eu|app|org|net)[.](?<TLD>.*)$') {
                                 
-                                $RootDomain = $Possibility[0]
+                                $RootDomain = $Matches.BadRoot
                     
                                 Write-Host "Sub-TLD detected in $RootDomain, applying the appropriate filters." -ForegroundColor Magenta       
                             }
                     
                             else {        
-                                $RootDomain = $Possibility[1]
+                                $RootDomain = $Matches.RealRoot
                     
                                 Write-Host "$RootDomain is Regex cleared" -ForegroundColor Yellow
                             }
                         }
                     }
-
+                    
                     # if the root domain doesn't have more than 1 dot then no need to change it, assign it as is
                     else {
                         $RootDomain = $Log.root
-
+                    
                         Write-Host "$RootDomain is OK" -ForegroundColor Magenta
-                    }    
+                    }     
                                         
                     # If the root domain's name resembles Microsoft domain names
                     if ($RootDomain -like '*msft*' `
