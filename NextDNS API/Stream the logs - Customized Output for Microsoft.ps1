@@ -135,7 +135,7 @@ try {
                     
                             # If NextDNS didn't properly provide the correct root domain, check if it contains any of these sub-TLDs
                             # If it does then select the entire string
-                            if ($Possibility[1] -match '(?<SubTLD>co|ac|com|t|uk|eu|app|org|net)[.](?<TLD>.*)$') {
+                            if ($Possibility[1] -match '(?<SubTLD>co|ac|com|uk|eu|app|org|net)[.](?<TLD>.*)$') {
                                 
                                 $RootDomain = $Possibility[0]
                     
