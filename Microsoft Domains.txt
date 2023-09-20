@@ -266,3 +266,4 @@ usgovtrafficmanager.net
 windowsazure.us
 azurewebsite.net
 microsoftstart.com
+s-msn.com
