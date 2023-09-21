@@ -268,3 +268,5 @@ azurewebsite.net
 microsoftstart.com
 s-msn.com
 t-msedge.net
+playfabapi.com
+playfab.com
