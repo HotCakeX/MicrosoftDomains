@@ -270,3 +270,5 @@ s-msn.com
 t-msedge.net
 playfabapi.com
 playfab.com
+microsoft.design
+fluentui.dev
