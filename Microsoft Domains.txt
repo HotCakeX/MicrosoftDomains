@@ -275,3 +275,4 @@ fluentui.dev
 1drv.ms
 github.blog
 githubstatus.com
+vscode-unpkg.net
