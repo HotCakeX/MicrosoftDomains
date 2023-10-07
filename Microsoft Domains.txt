@@ -276,3 +276,5 @@ fluentui.dev
 github.blog
 githubstatus.com
 vscode-unpkg.net
+staging-bing-int.com
+bingplaces.com
