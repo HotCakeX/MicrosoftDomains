@@ -278,3 +278,4 @@ githubstatus.com
 vscode-unpkg.net
 staging-bing-int.com
 bingplaces.com
+microsoftsupport.com
