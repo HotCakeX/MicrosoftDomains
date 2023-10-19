@@ -279,3 +279,4 @@ vscode-unpkg.net
 staging-bing-int.com
 bingplaces.com
 microsoftsupport.com
+forza.net
