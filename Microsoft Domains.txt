@@ -280,3 +280,5 @@ staging-bing-int.com
 bingplaces.com
 microsoftsupport.com
 forza.net
+forzamotorsport.net
+swiftkey.com
