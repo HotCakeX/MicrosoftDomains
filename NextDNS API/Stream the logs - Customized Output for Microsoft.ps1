@@ -250,7 +250,7 @@ catch {
     }
     # if it's not the first time error is thrown
     else {
-        if ($global:WaitSeconds -ge 15) {
+        if ($global:WaitSeconds -ge 20) {
             $global:WaitSeconds = 3
         }
         else {
@@ -259,7 +259,7 @@ catch {
     }
 	
     Write-Warning -Message "Restarting the script in $global:WaitSeconds seconds..."
-	    
+    
     Start-Sleep -Seconds $global:WaitSeconds
  
     # Restart using & operator - Runs the script again using its path
