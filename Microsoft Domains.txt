@@ -283,3 +283,15 @@ forza.net
 forzamotorsport.net
 swiftkey.com
 microsoftcasualgames.com
+cloudappsecurity.us
+azuregov-dns.us
+cloudappsecuritygov.com
+kaiza.la
+powerappsportals.com
+azuresynapse.net
+customvision.ai
+luis.ai
+videoindexer.ai
+adaptivecards.io
+jwt.ms
+mgt.dev
