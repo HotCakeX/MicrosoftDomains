@@ -295,3 +295,4 @@ videoindexer.ai
 adaptivecards.io
 jwt.ms
 mgt.dev
+wbd.ms
