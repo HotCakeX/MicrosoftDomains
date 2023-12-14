@@ -297,3 +297,4 @@ jwt.ms
 mgt.dev
 wbd.ms
 whiteboard.ms
+playwright.dev
