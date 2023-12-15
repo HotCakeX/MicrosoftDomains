@@ -73,23 +73,23 @@ while (-not $streamReader.EndOfStream) {
             # Remove any characters from the beginning of the JSON data that may make it invalid or malformed
             # This is a way of fixing the JSON data if it has some extra characters at the beginning, such as colon or space, that may prevent it from being parsed as a JSON object. We use the TrimStart method to remove those characters.
             $jsonData = $jsonData.TrimStart(': ')
-        
+
             # Test if the JSON data is a valid JSON object using the Test-Json cmdlet
             # This is a way of checking if the JSON data can be parsed as a JSON object, by using the Test-Json cmdlet. We use the -ErrorAction SilentlyContinue parameter to suppress any error messages and return false instead.
             $isValidJson = Test-Json $jsonData -ErrorAction SilentlyContinue
-        
+
             # Check if the JSON data is a valid JSON object
             # This is a way of validating that the Test-Json cmdlet returned true, and not false or an error. We use an if statement to check this.
             if ($isValidJson) {
                 # Convert the JSON data to a hashtable
                 # This is a way of parsing the JSON data as a JSON object, and converting it to a hashtable, which is a key-value pair collection that is easier to work with in PowerShell. We use the ConvertFrom-Json cmdlet with the -AsHashtable parameter to do this.
                 $log = $jsonData | ConvertFrom-Json -AsHashtable
-        
+
                 # Select only the properties that you are interested in
                 # This is a way of filtering the hashtable and getting only the properties that you want, such as timestamp, domain, root, encrypted, protocol, clientIp, status. We use the Select-Object cmdlet with the property names to do this.
                 # $log = $log | Select-Object timestamp, domain, root, encrypted, protocol, clientIp, status
                 $log = $log | Select-Object timestamp, domain, root, clientIp, status | Format-Table
-        
+
                 # Do something with the log object, such as displaying it or filtering it
                 # This is where you can write your own logic to process the log object, such as displaying it on the console, filtering it by some criteria, saving it to a file, etc. For this example, we just write it to the output using the Write-Output cmdlet.
                 Write-Output $log
@@ -97,9 +97,8 @@ while (-not $streamReader.EndOfStream) {
         }
     }
 }
-        
+
 # Close the response and the stream
 # This is where we clean up and close the resources that we used, such as the response object and the response stream. We use the Close method to do this.
 $response.Close()
 $responseStream.Close()
-        

@@ -107,53 +107,53 @@ try {
                 # Remove any characters from the beginning of the JSON data that may make it invalid or malformed
                 # This is a way of fixing the JSON data if it has some extra characters at the beginning, such as colon or space, that may prevent it from being parsed as a JSON object.
                 $JsonData = $JsonData.TrimStart(': ')
-        
+
                 # Test if the JSON data is a valid JSON object using the Test-Json cmdlet
                 # This is a way of checking if the JSON data can be parsed as a JSON object. We use the -ErrorAction SilentlyContinue parameter to suppress any error messages and return false instead.
                 $IsValidJson = Test-Json $JsonData -ErrorAction SilentlyContinue
-        
+
                 # Check if the JSON data is a valid JSON object
                 if ($IsValidJson) {
 
                     # Convert the JSON data to a hashtable
                     # This is a way of parsing the JSON data as a JSON object, and converting it to a hashtable
                     $Log = $JsonData | ConvertFrom-Json -AsHashtable
-        
+
                     # Select only the properties that you are interested in
                     # This is a way of filtering the hashtable and getting only the properties that you want, such as timestamp, domain, root, encrypted, protocol, clientIp, status. We use the Select-Object cmdlet with the property names to do this.
                     # $Log = $Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table
-              
+
                     # Making sure the root in the log is actually the root domain and not a sub-domain
                     # Sometimes it identifies sub-domains as root domains, so here we make sure it doesn't happen
                     # first see if the root domain has more than 1 dot in it, indicating that it contains sub-domains
                     if ($Log.root -like '*.*.*') {
                         # Define a regex pattern that starts from the end (rightmost side), captures everything until the 2nd dot (goes towards the left)
                         if ($Log.root -match '(?<BadRoot>(?s).*\.(?<RealRoot>.+?\..+?)$)') {
-                    
+
                             # If NextDNS didn't properly provide the correct root domain, check if it contains any of these sub-TLDs
                             # If it does then select the entire string
                             if ($Matches.BadRoot -match '(?<SubTLD>co|ac|com|uk|eu|app|org|net)[.](?<TLD>.*)$') {
-                                
+
                                 $RootDomain = $Matches.BadRoot
-                    
-                                Write-Host "Sub-TLD detected in $RootDomain, applying the appropriate filters." -ForegroundColor Magenta       
+
+                                Write-Host "Sub-TLD detected in $RootDomain, applying the appropriate filters." -ForegroundColor Magenta
                             }
-                    
-                            else {        
+
+                            else {
                                 $RootDomain = $Matches.RealRoot
-                    
+
                                 Write-Host "$RootDomain is Regex cleared" -ForegroundColor Yellow
                             }
                         }
                     }
-                    
+
                     # if the root domain doesn't have more than 1 dot then no need to change it, assign it as is
                     else {
                         $RootDomain = $Log.root
-                    
+
                         Write-Host "$RootDomain is OK" -ForegroundColor Magenta
-                    }     
-                                        
+                    }
+
                     # If the root domain's name resembles Microsoft domain names
                     if ($RootDomain -like '*msft*' `
                             -or $RootDomain -like '*microsoft*' `
@@ -168,7 +168,7 @@ try {
                         if ($Log.status -eq 'blocked') {
                             # Display it with yellow text on the console
                             Write-Host 'Microsoft BLOCKED' -ForegroundColor Yellow
-                            $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table) 
+                            $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
 
                             # Make sure the domain isn't already available in the file
                             $CurrentItemsMicrosoft = Get-Content -Path '.\MicrosoftPossibleBlocked.txt'
@@ -178,12 +178,12 @@ try {
                                 Add-Content -Value $RootDomain -Path '.\MicrosoftPossibleBlocked.txt'
                             }
                         }
-                        # If the domain was not blocked but also wasn't in the Microsoft domains Whitelist                     
-                        elseif ($RootDomain -notin $WhiteListedDomains) {                    
+                        # If the domain was not blocked but also wasn't in the Microsoft domains Whitelist
+                        elseif ($RootDomain -notin $WhiteListedDomains) {
                             # Display it with cyan text on the console
                             Write-Host 'Microsoft Domain Not Whitelisted' -ForegroundColor Cyan
                             $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
-               
+
                             # Make sure the domain isn't already available in the NotWhitelisted.Txt file
                             $CurrentItemsNotWhitelisted = Get-Content -Path '.\NotWhitelisted.txt'
 
@@ -195,19 +195,19 @@ try {
                         else {
                             # Display the allowed Microsoft domain with green text on the console
                             Write-Host 'Allowed' -ForegroundColor Green
-                            $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)  
+                            $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
                         }
                     }
                     # Display any blocked domain with red text on the console
                     elseif ($Log.status -eq 'blocked') {
                         Write-Host 'BLOCKED' -ForegroundColor Red
-                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)        
+                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
                     }
                     # Display any allowed domain with green text on the console
-                    else {                        
+                    else {
                         Write-Host 'Allowed' -ForegroundColor Green
-                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table) 
-                        
+                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
+
                         # if the domain is neither blocked, belongs to Microsoft nor is it in the whitelisted domains list
                         if ($RootDomain -notin $WhiteListedDomains) {
 
@@ -227,12 +227,12 @@ try {
                             else {
                                 # Add it to the hashtable with a count of one
                                 $DomainCount.Add($RootDomain, 1)
-                            }      
+                            }
 
                             # Convert the hashtable to a JSON string and write it to .\AllDomainsCount.txt
                             $DomainCount | ConvertTo-Json | Set-Content -Path '.\AllDomainsCount.txt'
                         }
-                    }                     
+                    }
                 }
             }
         }
@@ -241,12 +241,12 @@ try {
 catch {
     # Catch any exception that occurs in the try block
     Write-Error "An error occurred while reading from the stream: $_"
-    
+
     # Add cool down timer for restarting the script
 
     # If it's the first time error is thrown
     if (!$global:WaitSeconds) {
-        $global:WaitSeconds = 3 
+        $global:WaitSeconds = 3
     }
     # if it's not the first time error is thrown
     else {
@@ -257,11 +257,11 @@ catch {
             $global:WaitSeconds += 1
         }
     }
-	
+
     Write-Warning -Message "Restarting the script in $global:WaitSeconds seconds..."
-    
+
     Start-Sleep -Seconds $global:WaitSeconds
- 
+
     # Restart using & operator - Runs the script again using its path
     & $PSCommandPath
 
@@ -273,5 +273,5 @@ finally {
     $StreamReader.Dispose()
     $ResponseStream.Close()
     $ResponseStream.Dispose()
-    $Response.Close()    
+    $Response.Close()
 }
