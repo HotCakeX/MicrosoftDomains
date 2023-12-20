@@ -298,3 +298,4 @@ mgt.dev
 wbd.ms
 whiteboard.ms
 playwright.dev
+githubcopilot.com
