@@ -59,4 +59,8 @@ Please feel free to contribute to this repository by creating a pull request for
 3. The Whois information is not private for it and explicitly states that it's owned by Microsoft
 4. Not all domains are reachable when you enter them in the browser and that's understandable. If the domain you're adding is one of them, please clearly mention where and how you found it.
 
-Thank you!
+<p align="center">
+<img src="https://raw.githubusercontent.com/HotCakeX/.github/main/Pictures/Gifs/thankyou.gif" alt="Thank You Gif">
+</p>
+
+<br>
