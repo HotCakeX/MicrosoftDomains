@@ -1,14 +1,20 @@
 # Microsoft Domains
 
-This repository lists all active Microsoft root domains, no URLs and no sub-domains, for the purpose of Whitelisting in various systems and apps.
+This repository lists all active Microsoft root domains, no URLs and no sub-domains, **for the purpose of Whitelisting** in various systems and apps.
 
 This repository can facilitate the implementation of strict host-based firewall rules, for example, in a corporate environment.
 
-It can be used to apply aggressive adblocking capabilities to your network, for example, by using NextDNS, and then use the list in this repository to apply Whitelisting.
+It can be used to apply aggressive adblocking capabilities to your network, for example, by using NextDNS, and then **use the list in this repository to apply Whitelisting.**
 
 The reason sub-domains and URLs aren't being used is that for Whitelisting we use root domain with wildcard `*`.
 
-For example, `[*.]microsoft.com` or `[*]microsoft.com` (depending of the format your service/app supports) will allow all sub-domains and URLs under microsoft.com. This is the most efficient and maintainable way to Whitelist domains.
+For example, `[*.]microsoft.com` or `[*]microsoft.com` (depending of the format your service/app supports) will allow all sub-domains and URLs under microsoft.com. This is the most efficient and maintainable way to Whitelist these trustworthy domains.
+
+<br>
+
+## How to Whitelist Microsoft Domains in Ublock Origin
+
+<img src="https://raw.githubusercontent.com/HotCakeX/MicrosoftDomains/main/Media/Ublock%20Origin%20Config%20Whitelisting.gif" alt="How to Whitelist Microsoft Domains in Ublock Origin">
 
 <br>
 
@@ -16,7 +22,7 @@ For example, `[*.]microsoft.com` or `[*]microsoft.com` (depending of the format 
 
 NextDNS supports [Server-sent events (or SSE)](https://nextdns.github.io/api/#streaming), we can use it to view live stream of the logs in PowerShell, they are in JSON format.
 
-In this [directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextDNS%20API) you will find the PowerShell scripts. Use the `Stream the logs - Customized Output for Microsoft.ps1` script to automatically:
+In [this directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextDNS%20API) you will find the PowerShell scripts. Use the `Stream the logs - Customized Output for Microsoft.ps1` script to automatically:
 
 1. Detect Microsoft root domains using common patterns (You can apply any other patterns for different purposes)
 2. Store unique Microsoft domains that were blocked in a separate list
