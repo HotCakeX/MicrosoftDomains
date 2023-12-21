@@ -62,5 +62,3 @@ Please feel free to contribute to this repository by creating a pull request for
 <p align="center">
 <img src="https://raw.githubusercontent.com/HotCakeX/.github/main/Pictures/Gifs/thankyou.gif" alt="Thank You Gif">
 </p>
-
-<br>
