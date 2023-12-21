@@ -18,6 +18,17 @@ For example, `[*.]microsoft.com` or `[*]microsoft.com` (depending of the format 
 
 <br>
 
+## How to Whitelist Microsoft Domains in Microsoft Edge Browser
+
+1. Navigate to the following settings page in Edge browser: `edge://settings/content/cookies`
+2. Under `Clear on exit` section, enter the following items: `http://*` and `https://*`
+3. Under the `Allow` section, start adding the Microsoft domains from this repository, using this format `[*.]Microsoft.com`
+4. Now every time you close your Edge browser, the cookies of the websites that are not in the *Allow* list will be removed. This can effectively increase your security and privacy on the web, without breaking websites functionalities.
+5. You can optionally add any other website's domain that you don't want to log out of every time you close your browser to the list.
+6. All of these settings are synced so you only have to do these once.
+
+<br>
+
 ## How to use NextDNS API in PowerShell for Live Logs
 
 NextDNS supports [Server-sent events (or SSE)](https://nextdns.github.io/api/#streaming), we can use it to view live stream of the logs in PowerShell, they are in JSON format.
