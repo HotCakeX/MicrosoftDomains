@@ -1,3 +1,5 @@
+$ErrorActionPreference = 'Stop'
+
 # Make a new file to store the items that belong to Microsoft but are not in the Whitelisted domains list
 if (-NOT (Test-Path -Path .\NotWhitelisted.txt)) {
     New-Item -ItemType File -Path .\NotWhitelisted.txt -Force | Out-Null
@@ -26,8 +28,7 @@ else {
     [System.Management.Automation.OrderedHashtable]$DomainCount = Get-Content -Path '.\AllDomainsCount.txt' | ConvertFrom-Json -AsHashtable
 }
 
-# Try to loop through the stream and process each line as a JSON object
-# Use -ErrorAction Stop to report errors as exceptions
+# Try-Finally to loop through the stream and process each line as a JSON object
 try {
 
     # Read the Whitelisted Domains, it's always located here: https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains.txt
@@ -109,18 +110,17 @@ try {
                 $JsonData = $JsonData.TrimStart(': ')
 
                 # Test if the JSON data is a valid JSON object using the Test-Json cmdlet
-                # This is a way of checking if the JSON data can be parsed as a JSON object. We use the -ErrorAction SilentlyContinue parameter to suppress any error messages and return false instead.
-                $IsValidJson = Test-Json -Json $JsonData -ErrorAction SilentlyContinue
+                # Using the -ErrorAction SilentlyContinue parameter to suppress any error messages and return false instead.
+                [System.Boolean]$IsValidJson = Test-Json -Json $JsonData -ErrorAction SilentlyContinue
 
                 # Check if the JSON data is a valid JSON object
                 if ($IsValidJson) {
 
                     # Convert the JSON data to a hashtable
-                    # This is a way of parsing the JSON data as a JSON object, and converting it to a hashtable
                     [System.Management.Automation.OrderedHashtable]$Log = $JsonData | ConvertFrom-Json -AsHashtable
 
                     # Select only the properties that you are interested in
-                    # This is a way of filtering the hashtable and getting only the properties that you want, such as timestamp, domain, root, encrypted, protocol, clientIp, status. We use the Select-Object cmdlet with the property names to do this.
+                    # This is a way of filtering the hashtable and getting only the properties that you want
                     # $Log = $Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table
 
                     # Making sure the root in the log is actually the root domain and not a sub-domain
@@ -129,7 +129,7 @@ try {
                     if ($Log.root -like '*.*.*') {
                         # Define a regex pattern that starts from the end (rightmost side), captures everything until the 2nd dot (goes towards the left)
                         if ($Log.root -match [System.Text.RegularExpressions.Regex]'(?<BadRoot>(?s).*\.(?<RealRoot>.+?\..+?)$)') {
-                            
+
                             # If NextDNS didn't properly provide the correct root domain, check if it contains any of these sub-TLDs
                             # If it does then select the entire string
                             if ($Matches.BadRoot -match [System.Text.RegularExpressions.Regex]'(?<SubTLD>co|ac|com|uk|eu|app|org|net)[.](?<TLD>.*)$') {
@@ -159,8 +159,10 @@ try {
 
                         # If the domain that resembles Microsoft domain was blocked
                         if ($Log.status -eq 'blocked') {
+                            
                             # Display it with yellow text on the console
                             Write-Host -Object 'Microsoft BLOCKED' -ForegroundColor Yellow
+                            
                             $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                             # Make sure the domain isn't already available in the file
@@ -231,15 +233,15 @@ try {
         }
     }
 }
-catch {
-    # Catch any exception that occurs in the try block
-    Throw "An error occurred while reading from the stream: $_"
+finally {
+    # If an error occurred while reading from the stream
+    Write-Error -Message "An error occurred while reading from the stream: $_" -ErrorAction Continue
 
     # Add cool down timer for restarting the script
 
     # If it's the first time error is thrown
     if (!$WaitSeconds) {
-        $WaitSeconds = 3
+        [System.Int16]$WaitSeconds = 3
     }
     # if it's not the first time error is thrown
     else {
@@ -247,24 +249,24 @@ catch {
             $WaitSeconds = 3
         }
         else {
-            $WaitSeconds += 1
+            $WaitSeconds++
         }
     }
 
-    Throw "Restarting the script in $WaitSeconds seconds..."
+    Write-Error -Message "Restarting the script in $WaitSeconds seconds..." -ErrorAction Continue
+
+    # Close and dispose of the stream reader, response stream, and web response objects
+    try {
+        $StreamReader.Close()
+        $StreamReader.Dispose()
+        $ResponseStream.Close()
+        $ResponseStream.Dispose()
+        $Response.Close()
+    }
+    catch {}
 
     Start-Sleep -Seconds $WaitSeconds
 
     # Restart using & operator - Runs the script again using its path
     & $PSCommandPath
-
-}
-finally {
-    # Execute some cleanup actions after exiting the try or catch block
-    # Close and dispose of the stream reader, response stream, and web response objects
-    $StreamReader.Close()
-    $StreamReader.Dispose()
-    $ResponseStream.Close()
-    $ResponseStream.Dispose()
-    $Response.Close()
 }
