@@ -1,29 +1,29 @@
 # Make a new file to store the items that belong to Microsoft but are not in the Whitelisted domains list
-if (-NOT (Test-Path .\NotWhitelisted.txt)) {
+if (-NOT (Test-Path -Path .\NotWhitelisted.txt)) {
     New-Item -ItemType File -Path .\NotWhitelisted.txt -Force | Out-Null
 }
 
 # Make a new file to store the items that possibly belong to Microsoft but got blocked
-if (-NOT (Test-Path .\MicrosoftPossibleBlocked.txt)) {
+if (-NOT (Test-Path -Path .\MicrosoftPossibleBlocked.txt)) {
     New-Item -ItemType File -Path .\MicrosoftPossibleBlocked.txt -Force | Out-Null
 }
 
-# Make a new file to store all of the domains that were connected to, no duplicates. Excluding the domains stored in other Microsoft related lists
-if (-NOT (Test-Path .\AllDomains.txt)) {
+# Make a new file to store all of the domains that were connected to, no duplicates. Excluding the domains stored in other Microsoft related lists and blocked domains
+if (-NOT (Test-Path -Path .\AllDomains.txt)) {
     New-Item -ItemType File -Path .\AllDomains.txt -Force | Out-Null
 }
 
-# Make a new file to store all of the domains that were connected to, with their counts as a hashtable. Excluding the domains stored in other Microsoft related lists
-if (-NOT (Test-Path .\AllDomainsCount.txt)) {
+# Make a new file to store all of the domains that were connected to, with their counts as a hashtable. Excluding the domains stored in other Microsoft related lists and blocked domains
+if (-NOT (Test-Path -Path .\AllDomainsCount.txt)) {
     New-Item -ItemType File -Path .\AllDomainsCount.txt -Force | Out-Null
 
-    # Create an empty hashtable to store the domains and their counts
-    $DomainCount = [System.Collections.Hashtable]::new()
+    # Create an empty ordered hashtable to store the domains and their counts
+    $DomainCount = [System.Management.Automation.OrderedHashtable]::new()
 }
 # If the file and hashtable already exists, read it
 else {
     # Read the JSON string from the file and convert it to a hashtable
-    $DomainCount = Get-Content -Path '.\AllDomainsCount.txt' | ConvertFrom-Json -AsHashtable
+    [System.Management.Automation.OrderedHashtable]$DomainCount = Get-Content -Path '.\AllDomainsCount.txt' | ConvertFrom-Json -AsHashtable
 }
 
 # Try to loop through the stream and process each line as a JSON object
@@ -31,22 +31,22 @@ else {
 try {
 
     # Read the Whitelisted Domains, it's always located here: https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains.txt
-    $WhiteListedDomains = Get-Content -Path '.\Microsoft Domains.txt'
+    [System.String[]]$WhiteListedDomains = Get-Content -Path '.\Microsoft Domains.txt'
 
     # Define the API key and the profile ID
     # These are the credentials that you need to access the NextDNS API
     # Get your API key from here: https://my.nextdns.io/account
-    $ApiKey = ''
-    $ProfileId = ''
+    [System.String]$ApiKey = ''
+    [System.String]$ProfileId = ''
 
     # Define the URL for streaming the logs
     # This is the endpoint that you need to send a web request to get the logs as a SSE stream
     # https://nextdns.github.io/api/#streaming
-    $URL = "https://api.nextdns.io/profiles/$ProfileId/logs/stream"
+    [System.Uri]$URL = "https://api.nextdns.io/profiles/$ProfileId/logs/stream"
 
     # Create a header with the API key as a hashtable
     # This is a key-value pair that you need to include in the web request to authenticate yourself
-    $Header = @{
+    [System.Collections.Hashtable]$Header = @{
         'X-Api-Key' = $ApiKey
     }
     # Create an empty NameValueCollection
@@ -74,7 +74,7 @@ try {
 
     # Get the web response object
     # This is an object that represents a HTTP response that is received from the server after sending the web request
-    $Response = $WebRequest.GetResponse()
+    [System.Net.HttpWebResponse]$Response = $WebRequest.GetResponse()
 
     # Get the response stream
     # This is an object that represents a stream of data that is sent by the server as part of the response, and it can be read line by line using a stream reader object
@@ -110,14 +110,14 @@ try {
 
                 # Test if the JSON data is a valid JSON object using the Test-Json cmdlet
                 # This is a way of checking if the JSON data can be parsed as a JSON object. We use the -ErrorAction SilentlyContinue parameter to suppress any error messages and return false instead.
-                $IsValidJson = Test-Json $JsonData -ErrorAction SilentlyContinue
+                $IsValidJson = Test-Json -Json $JsonData -ErrorAction SilentlyContinue
 
                 # Check if the JSON data is a valid JSON object
                 if ($IsValidJson) {
 
                     # Convert the JSON data to a hashtable
                     # This is a way of parsing the JSON data as a JSON object, and converting it to a hashtable
-                    $Log = $JsonData | ConvertFrom-Json -AsHashtable
+                    [System.Management.Automation.OrderedHashtable]$Log = $JsonData | ConvertFrom-Json -AsHashtable
 
                     # Select only the properties that you are interested in
                     # This is a way of filtering the hashtable and getting only the properties that you want, such as timestamp, domain, root, encrypted, protocol, clientIp, status. We use the Select-Object cmdlet with the property names to do this.
@@ -128,95 +128,88 @@ try {
                     # first see if the root domain has more than 1 dot in it, indicating that it contains sub-domains
                     if ($Log.root -like '*.*.*') {
                         # Define a regex pattern that starts from the end (rightmost side), captures everything until the 2nd dot (goes towards the left)
-                        if ($Log.root -match '(?<BadRoot>(?s).*\.(?<RealRoot>.+?\..+?)$)') {
-
+                        if ($Log.root -match [System.Text.RegularExpressions.Regex]'(?<BadRoot>(?s).*\.(?<RealRoot>.+?\..+?)$)') {
+                            
                             # If NextDNS didn't properly provide the correct root domain, check if it contains any of these sub-TLDs
                             # If it does then select the entire string
-                            if ($Matches.BadRoot -match '(?<SubTLD>co|ac|com|uk|eu|app|org|net)[.](?<TLD>.*)$') {
+                            if ($Matches.BadRoot -match [System.Text.RegularExpressions.Regex]'(?<SubTLD>co|ac|com|uk|eu|app|org|net)[.](?<TLD>.*)$') {
 
-                                $RootDomain = $Matches.BadRoot
+                                [System.String]$RootDomain = $Matches.BadRoot
 
-                                Write-Host "Sub-TLD detected in $RootDomain, applying the appropriate filters." -ForegroundColor Magenta
+                                Write-Host -Object "Sub-TLD detected in $RootDomain, applying the appropriate filters." -ForegroundColor Magenta
                             }
 
                             else {
-                                $RootDomain = $Matches.RealRoot
+                                [System.String]$RootDomain = $Matches.RealRoot
 
-                                Write-Host "$RootDomain is Regex cleared" -ForegroundColor Yellow
+                                Write-Host -Object "$RootDomain is Regex cleared" -ForegroundColor Yellow
                             }
                         }
                     }
 
                     # if the root domain doesn't have more than 1 dot then no need to change it, assign it as is
                     else {
-                        $RootDomain = $Log.root
+                        [System.String]$RootDomain = $Log.root
 
-                        Write-Host "$RootDomain is OK" -ForegroundColor Magenta
+                        Write-Host -Object "$RootDomain is OK" -ForegroundColor Magenta
                     }
 
                     # If the root domain's name resembles Microsoft domain names
-                    if ($RootDomain -like '*msft*' `
-                            -or $RootDomain -like '*microsoft*' `
-                            -or $RootDomain -like '*bing*' `
-                            -or $RootDomain -like '*xbox*' `
-                            -or $RootDomain -like '*azure*' `
-                            -or $RootDomain -like '*.ms*' `
-                            -or $RootDomain -like '*.msn*' `
-                            -or $RootDomain -like '*edge*'
-                    ) {
+                    if ($RootDomain -match [System.Text.RegularExpressions.Regex]'.*(msft|microsoft|bing|xbox|azure|\.ms|\.msn|edge).*') {
+
                         # If the domain that resembles Microsoft domain was blocked
                         if ($Log.status -eq 'blocked') {
                             # Display it with yellow text on the console
-                            Write-Host 'Microsoft BLOCKED' -ForegroundColor Yellow
-                            $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
+                            Write-Host -Object 'Microsoft BLOCKED' -ForegroundColor Yellow
+                            $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                             # Make sure the domain isn't already available in the file
-                            $CurrentItemsMicrosoft = Get-Content -Path '.\MicrosoftPossibleBlocked.txt'
+                            [System.String[]]$CurrentItemsMicrosoft = Get-Content -Path '.\MicrosoftPossibleBlocked.txt' -Force
 
                             # Add the Blocked domain to the MicrosoftPossibleBlocked.txt list for later review
                             if ($RootDomain -notin $CurrentItemsMicrosoft) {
-                                Add-Content -Value $RootDomain -Path '.\MicrosoftPossibleBlocked.txt'
+                                Add-Content -Value $RootDomain -Path '.\MicrosoftPossibleBlocked.txt' -Force
                             }
                         }
                         # If the domain was not blocked but also wasn't in the Microsoft domains Whitelist
                         elseif ($RootDomain -notin $WhiteListedDomains) {
                             # Display it with cyan text on the console
-                            Write-Host 'Microsoft Domain Not Whitelisted' -ForegroundColor Cyan
-                            $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
+                            Write-Host -Object 'Microsoft Domain Not Whitelisted' -ForegroundColor Cyan
+                            $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                             # Make sure the domain isn't already available in the NotWhitelisted.Txt file
-                            $CurrentItemsNotWhitelisted = Get-Content -Path '.\NotWhitelisted.txt'
+                            [System.String[]]$CurrentItemsNotWhitelisted = Get-Content -Path '.\NotWhitelisted.txt' -Force
 
                             # Add the detected domain to the NotWhitelisted.Txt list for later review
                             if ($RootDomain -notin $CurrentItemsNotWhitelisted) {
-                                Add-Content -Value $RootDomain -Path '.\NotWhitelisted.txt'
+                                Add-Content -Value $RootDomain -Path '.\NotWhitelisted.txt' -Force
                             }
                         }
                         else {
                             # Display the allowed Microsoft domain with green text on the console
-                            Write-Host 'Allowed' -ForegroundColor Green
-                            $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
+                            Write-Host -Object 'Allowed' -ForegroundColor Green
+                            $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
                         }
                     }
                     # Display any blocked domain with red text on the console
                     elseif ($Log.status -eq 'blocked') {
-                        Write-Host 'BLOCKED' -ForegroundColor Red
-                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
+                        Write-Host -Object 'BLOCKED' -ForegroundColor Red
+                        $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
                     }
                     # Display any allowed domain with green text on the console
                     else {
-                        Write-Host 'Allowed' -ForegroundColor Green
-                        $($Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table)
+                        Write-Host -Object 'Allowed' -ForegroundColor Green
+                        $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                         # if the domain is neither blocked, belongs to Microsoft nor is it in the whitelisted domains list
                         if ($RootDomain -notin $WhiteListedDomains) {
 
                             # Get the content of the .\AllDomains.txt
-                            $CurrentItemsAllDomains = Get-Content -Path '.\AllDomains.txt'
+                            [System.String[]]$CurrentItemsAllDomains = Get-Content -Path '.\AllDomains.txt' -Force
 
                             # Add the domain to .\AllDomains.txt , make sure it's unique and not already in the list
                             if ($RootDomain -notin $CurrentItemsAllDomains) {
-                                Add-Content -Value $RootDomain -Path '.\AllDomains.txt'
+                                Add-Content -Value $RootDomain -Path '.\AllDomains.txt' -Force
                             }
 
                             # Check if the domain already exists in the hashtable
@@ -230,7 +223,7 @@ try {
                             }
 
                             # Convert the hashtable to a JSON string and write it to .\AllDomainsCount.txt
-                            $DomainCount | ConvertTo-Json | Set-Content -Path '.\AllDomainsCount.txt'
+                            $DomainCount | ConvertTo-Json | Set-Content -Path '.\AllDomainsCount.txt' -Force
                         }
                     }
                 }
@@ -240,27 +233,27 @@ try {
 }
 catch {
     # Catch any exception that occurs in the try block
-    Write-Error "An error occurred while reading from the stream: $_"
+    Throw "An error occurred while reading from the stream: $_"
 
     # Add cool down timer for restarting the script
 
     # If it's the first time error is thrown
-    if (!$global:WaitSeconds) {
-        $global:WaitSeconds = 3
+    if (!$WaitSeconds) {
+        $WaitSeconds = 3
     }
     # if it's not the first time error is thrown
     else {
-        if ($global:WaitSeconds -ge 20) {
-            $global:WaitSeconds = 3
+        if ($WaitSeconds -ge 20) {
+            $WaitSeconds = 3
         }
         else {
-            $global:WaitSeconds += 1
+            $WaitSeconds += 1
         }
     }
 
-    Write-Warning -Message "Restarting the script in $global:WaitSeconds seconds..."
+    Throw "Restarting the script in $WaitSeconds seconds..."
 
-    Start-Sleep -Seconds $global:WaitSeconds
+    Start-Sleep -Seconds $WaitSeconds
 
     # Restart using & operator - Runs the script again using its path
     & $PSCommandPath
