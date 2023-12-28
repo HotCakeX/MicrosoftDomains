@@ -300,3 +300,4 @@ whiteboard.ms
 playwright.dev
 githubcopilot.com
 translatoruser.net
+nuget.info
