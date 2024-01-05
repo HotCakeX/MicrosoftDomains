@@ -310,3 +310,5 @@ msftauth.cn
 microsoft.cn
 msidentity.cn
 windowsazure.cn
+battle.net
+blizzard.com
