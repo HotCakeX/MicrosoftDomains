@@ -302,3 +302,17 @@ githubcopilot.com
 translatoruser.net
 nuget.info
 azconfig.io
+applicationinsights.us
+msidentity.us
+loganalytics.us
+msauth.cn
+msftauth.cn
+azureedge.net
+s-microsoft.com
+azure.cn
+microsoft.cn
+microsoftonline.cn
+msidentity.cn
+chinacloudapi.cn
+trafficmanager.cn
+windowsazure.cn
