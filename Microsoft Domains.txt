@@ -327,3 +327,7 @@ linkedin.cn
 linkedinmobileapp.com
 lnkd.in
 windowsmedia.com
+microsoft.uz
+microsoftrewards.com
+microsoft.az
+xboxab.net
