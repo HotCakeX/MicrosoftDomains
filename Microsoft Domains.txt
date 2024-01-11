@@ -330,3 +330,8 @@ microsoftrewards.com
 microsoft.az
 xboxab.net
 olsvc.com
+spov-dc-msedge.net
+spoppe.com
+spo-msedge.net
+sharepoint-df.com
+sharepoint.de
