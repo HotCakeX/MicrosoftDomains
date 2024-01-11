@@ -317,11 +317,9 @@ blz-contentstack.com
 activisionblizzard.com
 demonware.net
 github.community
-githubassets.com
 ghcr.io
 bizographics.com
 licdn.cn
-licdn.com
 linkedin.at
 linkedin.cn
 linkedinmobileapp.com
