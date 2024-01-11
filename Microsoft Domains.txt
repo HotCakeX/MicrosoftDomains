@@ -335,3 +335,11 @@ spoppe.com
 spo-msedge.net
 sharepoint-df.com
 sharepoint.de
+mojang.com
+minecraft-services.net
+msgamestudios.com
+minecraftservices.com
+minecraft.net
+vsallin.net
+vsassets.io
+visualstudio.com
