@@ -340,3 +340,6 @@ minecraft-services.net
 msgamestudios.com
 minecraftservices.com
 vsallin.net
+king.com
+midasplayer.com
+midasplayer.cloud
