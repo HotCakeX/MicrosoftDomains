@@ -313,3 +313,6 @@ windowsazure.cn
 battle.net
 blizzard.com
 spov-msedge.net
+blz-contentstack.com
+activisionblizzard.com
+demonware.net
