@@ -29,10 +29,10 @@ jobs:
       - name: Run a one-line script
         shell: pwsh
         run: |
-          (Get-Content "Microsoft Domains.txt").Trim() |
-          ForEach-Object { $_.ToLower().Split() } |
-          Where-Object { $_.trim() -ne "" } |
-          Select-Object -Unique | Set-Content "Microsoft Domains.txt"
+          (Get-Content -Path 'Microsoft Domains.txt').Trim() |
+          ForEach-Object -Process { $_.ToLower().Split() } |
+          Where-Object -FilterScript { $_.trim() -ne '' } |
+          Select-Object -Unique | Set-Content -Path 'Microsoft Domains.txt' -Force
 
           git config --global user.email "spynetgirl@outlook"
           git config --global user.name "HotCakeX"
