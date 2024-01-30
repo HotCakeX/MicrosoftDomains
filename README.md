@@ -44,13 +44,13 @@ In [this directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextD
 
 <br>
 
-## Automated GitHub workflow
+## Automated GitHub Workflow
 
 The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/actions/workflows/Duplicate%20and%20empty%20lines%20removal.yml) upon changes for duplicate entries and empty lines, and if any are found, they will be removed.
 
 <br>
 
-## Some of the sources
+## Some of the Sources
 
 * https://learn.microsoft.com/en-us/power-platform/admin/online-requirements
 * https://learn.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges?view=o365-worldwide
@@ -63,12 +63,9 @@ The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/action
 
 Please feel free to contribute to this repository by creating a pull request for PowerShell scripts or domains.
 
-### If you're adding a domain, make sure it:
+### Note
 
-1. Doesn't redirect to another domain
-2. Is active and not deprecated
-3. The Whois information is not private for it and explicitly states that it's owned by Microsoft
-4. Not all domains are reachable when you enter them in the browser and that's understandable. If the domain you're adding is one of them, please clearly mention where and how you found it.
+If you're adding a domain, make sure the Whois information is not private for it and explicitly states that it's owned by Microsoft, you can also view the assigned name servers to the domain to make sure it's owned by Microsoft. For example if they point to the Azure name servers.
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/HotCakeX/.github/main/Pictures/Gifs/thankyou.gif" alt="Thank You Gif">
