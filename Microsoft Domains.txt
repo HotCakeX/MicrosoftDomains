@@ -576,7 +576,6 @@ bill.ms.net
 microsoftonlinesupport.net
 msolctp-int.com
 bcentral.com
-sqlazureservices.com
 agecommunity.com
 rdst-internal.net
 mgsgamesonline.com
@@ -608,10 +607,8 @@ mssearchatwork.com
 mesh-int.com
 windowsandme.com
 zune-ppe.net
-mesh-main.com
-Exhybrid.com
+exhybrid.com
 mentmsxiamen.net
-mesh-main.com
 searchperks.com
 svceng.com
 xboxfriends.jp
