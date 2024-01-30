@@ -396,10 +396,9 @@ microsoftelearning.com
 theultimatesteal.ie
 wlxrs.com
 prodmirror1-bing-int1.com
-Kinectshare.com
+kinectshare.com
 azure-preview.com
 passportimages-int.org
-microsoftonline-p.com
 microsoftonlineimages-int.com
 msffo-int.com
 microsofthup.com
@@ -408,11 +407,9 @@ microsoftaffiliates.com
 msn-tst.com
 microsoftoem.org
 explore.ms
-msn-ppe.com
 mappoint.net
 msacademicverify.com
 microsoftstore.ca
-microsoft-ppe.com
 healthvault.com
 officelabs-int.com
 live-ppe.com
@@ -421,8 +418,6 @@ moonport.net
 adbureau.net
 aquantive.com
 iponet.net
-windows-int.net
-windowsphone.com
 dnsdemo4.com
 halowars.com
 windowsmarketplace.com
