@@ -29,6 +29,12 @@ For example, `[*.]microsoft.com` or `[*]microsoft.com` (depending of the format 
 
 <br>
 
+## How to Whitelist Microsoft Domains in NextDNS
+
+This [PowerShell script](https://github.com/HotCakeX/MicrosoftDomains/blob/main/NextDNS%20API/Add%20Domains%20to%20the%20NextDNS%20AllowList.ps1) allows you to automatically add the Microsoft domains from this repository to the allowlist of your NextDNS profile using the API. To use this script, you need to first edit it by entering your NextDNS API key and your profile ID in it and then run it in PowerShell.
+
+<br>
+
 ## How to use NextDNS API in PowerShell for Live Logs
 
 NextDNS supports [Server-sent events (or SSE)](https://nextdns.github.io/api/#streaming), we can use it to view live stream of the logs in PowerShell, they are in JSON format.
