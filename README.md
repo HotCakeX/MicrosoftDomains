@@ -63,6 +63,10 @@ The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/action
 * https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-domains
 * https://learn.microsoft.com/en-us/mem/intune/fundamentals/intune-endpoints
 
+### There is another list in here but it's not currently included in the domains list
+
+* https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/attack-simulation-training-get-started?view=o365-worldwide#simulations
+
 <br>
 
 ## Contributing
