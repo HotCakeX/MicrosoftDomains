@@ -69,6 +69,8 @@ The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/action
 
 ### Defender External Attack Surface Management (EASM) on Azure
 
+I use this Azure service to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries.
+
 * https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/
 
 <br>
