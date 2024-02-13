@@ -31,7 +31,7 @@ jobs:
         run: |
           (Get-Content -Path 'Microsoft Domains.txt').Trim() |
           ForEach-Object -Process { $_.ToLower().Split() } |
-          Where-Object -FilterScript { ($_.trim() -ne '') -and ($_ -match '[a-zA-z0-9]') } |
+          Where-Object -FilterScript { ($_.trim() -ne '') -and ($_ -match '[a-zA-Z0-9]') } |
           Select-Object -Unique | Set-Content -Path 'Microsoft Domains.txt' -Force
 
           git config --global user.email "spynetgirl@outlook"
