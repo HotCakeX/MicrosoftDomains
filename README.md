@@ -67,6 +67,10 @@ The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/action
 
 * https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/attack-simulation-training-get-started?view=o365-worldwide#simulations
 
+### Defender External Attack Surface Management (EASM) on Azure
+
+* https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/
+
 <br>
 
 ## Contributing
