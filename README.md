@@ -50,9 +50,21 @@ In [this directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextD
 
 <br>
 
+## Defender External Attack Surface Management (EASM)
+
+I use this [Azure service](https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/) to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries. They are saved in a file called `Microsoft Domains Extra.txt` at the root of this repository. They are not manually verified by me like the main list.
+
+<br>
+
 ## Automated GitHub Workflow
 
-The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/actions/workflows/Duplicate%20and%20empty%20lines%20removal.yml) upon changes for duplicate entries and empty lines, and if any are found, they will be removed.
+The [GitHub action](https://github.com/HotCakeX/MicrosoftDomains/actions/workflows/Duplicate%20and%20empty%20lines%20removal.yml) runs every time there is a push in this repository, it makes sure:
+
+* There are no empty lines in the lists
+* There are no entries in the lists that start with `xn--`
+* The lists have no duplicate entires
+* The `Microsoft Domains Extra.txt` does not include any domain that already exists in `Microsoft Domains.txt`
+* There are no entries with non-alphanumeric characters
 
 <br>
 
@@ -66,12 +78,6 @@ The domain list is [checked](https://github.com/HotCakeX/MicrosoftDomains/action
 ### There is another list in here but it's not currently included in the domains list
 
 * https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/attack-simulation-training-get-started?view=o365-worldwide#simulations
-
-### Defender External Attack Surface Management (EASM) on Azure
-
-I use this Azure service to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries.
-
-* https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/
 
 <br>
 
