@@ -2734,8 +2734,6 @@ githubconstellation.com
 github.new
 github.tv
 npmenterprise.forum
-github.io
-githubusercontent.com
 githubuniverse.com
 npm.support
 covid-modeling.org
@@ -2749,17 +2747,13 @@ opensource.guide
 semmle.com
 octocaptcha.com
 lgtm.com
-githubstatus.com
 github-debug.com
 git-lfs.com
 primer.style
 gitref.org
-ghcr.io
 atom.io
 githubpreview.dev
-github.dev
 opensourcefriday.com
-githubapp.com
 githubpages.com
 github.works
 github.careers
@@ -2798,14 +2792,12 @@ gitstub.com
 githubworkspaces.com
 github-camo.com
 githubengineering.com
-githubassets.com
 dependabot.com
 github.co
 spectrum.chat
 githubenterprise.org
 github.ae
 github.bg
-github.blog
 ghdocs.com
 codespaces.new
 easel.io
@@ -2903,7 +2895,6 @@ octocademy.com
 easelinc.com
 http-npmjs.co
 git.io
-github.com
 npm-js.me
 octodns.com
 npm.tips
@@ -2922,7 +2913,6 @@ privategithub.com
 githubgoogleworkspace.dev
 npmjs.rocks
 npmjs.site
-github.community
 brickworkapp.com
 semmle.info
 npmjs-https.info
