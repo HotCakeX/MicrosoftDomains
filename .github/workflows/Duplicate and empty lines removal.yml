@@ -29,10 +29,17 @@ jobs:
       - name: Run a one-line script
         shell: pwsh
         run: |
-          (Get-Content -Path 'Microsoft Domains.txt').Trim() |
-          ForEach-Object -Process { $_.ToLower().Split() } |
-          Where-Object -FilterScript { ($_.trim() -ne '') -and ($_ -match '[a-zA-Z0-9]') -and ($_ -notmatch '^xn--.*' ) } |
-          Select-Object -Unique | Set-Content -Path 'Microsoft Domains.txt' -Force
+          [System.String]$File1 = 'Microsoft Domains.txt'
+          [System.String]$File2 = 'Microsoft Domains Extra.txt'
+
+          [System.String[]]$File1Content = (Get-Content -Path $File1).Trim() |
+          Where-Object -FilterScript { ($_.trim() -ne '') -and ($_ -match '[a-zA-Z0-9]') -and ($_ -notmatch '^xn--.*' ) } | Select-Object -Unique
+
+          $File1Content | Set-Content -Path $File1 -Force
+
+          (Get-Content -Path $File2).Trim() |
+          Where-Object -FilterScript { ($_.trim() -ne '') -and ($_ -match '[a-zA-Z0-9]') -and ($_ -notmatch '^xn--.*' ) -and ($_ -notin $File1Content) } |
+          Select-Object -Unique | Set-Content -Path $File2 -Force
 
           git config --global user.email "spynetgirl@outlook"
           git config --global user.name "HotCakeX"
