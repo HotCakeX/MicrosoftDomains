@@ -58,7 +58,7 @@ Includes the Microsoft domains that are verified to be working and owned by Micr
 
 ### [Defender External Attack Surface Management (EASM)](https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains%20-%20EASM.txt)
 
-I use this [Azure service](https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/) to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries. They are saved in a file called `Microsoft Domains Extra.txt` at the root of this repository. They are not manually verified by me like the general list.
+I use this [Azure service](https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/) to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries. They are not manually verified by me like the general list.
 
 ### [Attack Simulation Training List](https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains%20-%20Attack%20Simulation%20Training.txt)
 
