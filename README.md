@@ -50,9 +50,19 @@ In [this directory](https://github.com/HotCakeX/MicrosoftDomains/tree/main/NextD
 
 <br>
 
-## Defender External Attack Surface Management (EASM)
+## About The Lists
 
-I use this [Azure service](https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/) to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries. They are saved in a file called `Microsoft Domains Extra.txt` at the root of this repository. They are not manually verified by me like the main list.
+### [General List](https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains.txt)
+
+Includes the Microsoft domains that are verified to be working and owned by Microsoft or their subsidiaries.
+
+### [Defender External Attack Surface Management (EASM)](https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains%20-%20EASM.txt)
+
+I use this [Azure service](https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/) to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries. They are saved in a file called `Microsoft Domains Extra.txt` at the root of this repository. They are not manually verified by me like the general list.
+
+### [Attack Simulation Training List]()
+
+They were gathered from this [source](https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/attack-simulation-training-get-started?view=o365-worldwide#simulations) and are valid Microsoft owned domains but kept in a separate list because they are used for training purposes.
 
 <br>
 
@@ -63,7 +73,7 @@ The [GitHub action](https://github.com/HotCakeX/MicrosoftDomains/actions/workflo
 * There are no empty lines in the lists
 * There are no entries in the lists that start with `xn--`
 * The lists have no duplicate entires
-* The `Microsoft Domains Extra.txt` does not include any domain that already exists in `Microsoft Domains.txt`
+* The `Microsoft Domains - EASM.txt` does not include any domain that already exists in `Microsoft Domains.txt`
 * There are no entries with non-alphanumeric characters
 
 <br>
@@ -74,10 +84,6 @@ The [GitHub action](https://github.com/HotCakeX/MicrosoftDomains/actions/workflo
 * https://learn.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges?view=o365-worldwide
 * https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-domains
 * https://learn.microsoft.com/en-us/mem/intune/fundamentals/intune-endpoints
-
-### There is another list in here but it's not currently included in the domains list
-
-* https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/attack-simulation-training-get-started?view=o365-worldwide#simulations
 
 <br>
 
