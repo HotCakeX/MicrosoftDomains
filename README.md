@@ -60,7 +60,7 @@ Includes the Microsoft domains that are verified to be working and owned by Micr
 
 I use this [Azure service](https://azure.microsoft.com/en-us/pricing/details/defender-external-attack-surface-management/) to directly query the ISG (Intelligent Security Graph) to get the domains of Microsoft's subsidiaries. They are saved in a file called `Microsoft Domains Extra.txt` at the root of this repository. They are not manually verified by me like the general list.
 
-### [Attack Simulation Training List]()
+### [Attack Simulation Training List](https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains%20-%20Attack%20Simulation%20Training.txt)
 
 They were gathered from this [source](https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/attack-simulation-training-get-started?view=o365-worldwide#simulations) and are valid Microsoft owned domains but kept in a separate list because they are used for training purposes.
 
