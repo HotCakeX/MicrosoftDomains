@@ -91,9 +91,13 @@ The [GitHub action](https://github.com/HotCakeX/MicrosoftDomains/actions/workflo
 
 Please feel free to contribute to this repository by creating a pull request for PowerShell scripts or domains.
 
+### Help With Validation
+
+Help is needed to validate and verify the WhoIs information of each domain in the Defender External Attack Surface Management (EASM) list and add them to th General List.
+
 ### Note
 
-If you're adding a domain, make sure the Whois information is not private for it and explicitly states that it's owned by Microsoft, you can also view the assigned name servers to the domain to make sure it's owned by Microsoft. For example if they point to the Azure name servers.
+If you're adding a domain, make sure the WhoIs information is not private for it and explicitly states that it's either owned by Microsoft or one of Microsoft's Subsidiaries. You can also view the assigned name servers to the domain to make sure it's owned by Microsoft. For example if they point to the Azure name servers.
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/HotCakeX/.github/main/Pictures/Gifs/thankyou.gif" alt="Thank You Gif">
