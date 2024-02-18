@@ -81,7 +81,7 @@ The [GitHub action](https://github.com/HotCakeX/MicrosoftDomains/actions/workflo
 ## Some of the Sources
 
 * https://learn.microsoft.com/en-us/power-platform/admin/online-requirements
-* https://learn.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges?view=o365-worldwide
+* https://learn.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges
 * https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-domains
 * https://learn.microsoft.com/en-us/mem/intune/fundamentals/intune-endpoints
 
