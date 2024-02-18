@@ -93,7 +93,7 @@ Please feel free to contribute to this repository by creating a pull request for
 
 ### Help With Validation
 
-Help is needed to validate and verify the WhoIs information of each domain in the Defender External Attack Surface Management (EASM) list and add them to th General List.
+Help is needed to validate and verify the WhoIs information of each domain in the Defender External Attack Surface Management (EASM) list and add them to the General List.
 
 ### Note
 
