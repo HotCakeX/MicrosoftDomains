@@ -30,7 +30,7 @@ jobs:
         shell: pwsh
         run: |
           [System.String]$File1 = 'Microsoft Domains.txt'
-          [System.String]$File2 = 'Microsoft Domains Extra.txt'
+          [System.String]$File2 = 'Microsoft Domains - EASM.txt'
 
           [System.String[]]$File1Content = (Get-Content -Path $File1).Trim() |
           Where-Object -FilterScript { ($_.trim() -ne '') -and ($_ -match '[a-zA-Z0-9]') -and ($_ -notmatch '^xn--.*' ) } | Select-Object -Unique
