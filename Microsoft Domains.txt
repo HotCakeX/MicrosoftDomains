@@ -637,3 +637,4 @@ identitystandards.io
 onnxruntime.ai
 wmlalicensing.com
 msbill.info
+microsoftmerchandise.com
