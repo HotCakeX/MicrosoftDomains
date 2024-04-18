@@ -159,10 +159,10 @@ try {
 
                         # If the domain that resembles Microsoft domain was blocked
                         if ($Log.status -eq 'blocked') {
-                            
+
                             # Display it with yellow text on the console
                             Write-Host -Object 'Microsoft BLOCKED' -ForegroundColor Yellow
-                            
+
                             $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                             # Make sure the domain isn't already available in the file
