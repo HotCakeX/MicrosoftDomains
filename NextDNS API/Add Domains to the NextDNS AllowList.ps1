@@ -2,7 +2,7 @@
 [Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject]$MicrosoftDomainsRaw = Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/HotCakeX/MicrosoftDomains/main/Microsoft%20Domains.txt'
 
 # Extract the domains from the response - removing the empty lines
-[System.String[]]$MicrosoftDomains = $MicrosoftDomainsRaw.Content -split '\n' | Where-Object { -NOT ([System.String]::IsNullOrEmpty($_)) }
+$MicrosoftDomains = [System.Collections.Generic.HashSet[System.String]] @($MicrosoftDomainsRaw.Content -split '\n' | Where-Object -FilterScript { -NOT ([System.String]::IsNullOrEmpty($_)) })
 
 Write-Host -Object "$($MicrosoftDomains.Count) domains available on GitHub" -ForegroundColor Magenta
 
@@ -21,14 +21,14 @@ Write-Host -Object "$($MicrosoftDomains.Count) domains available on GitHub" -For
 [System.Object]$AllowListRaw = Invoke-RestMethod -Method 'Get' -Uri "https://api.nextdns.io/profiles/$ProfileId/allowlist" -Headers $Header
 
 # Extract the domains from response - removing the empty lines
-[System.String[]]$AllowList = $AllowListRaw.data.id | Where-Object { -NOT ([System.String]::IsNullOrEmpty($_)) }
+$AllowList = [System.Collections.Generic.HashSet[System.String]] @($AllowListRaw.data.id | Where-Object -FilterScript { -NOT ([System.String]::IsNullOrEmpty($_)) })
 
-Write-Host -Object "$($AllowList.Count) domains available in the NextDNS Allowlist" -ForegroundColor Cyan
+Write-Host -Object "$($AllowList.Count) domain(s) available in the NextDNS Allowlist" -ForegroundColor Cyan
 
 # Compare the two lists
-[System.String[]]$DomainsNotInAllowList = $MicrosoftDomains | Where-Object { $_ -notin $AllowList }
+$DomainsNotInAllowList = [System.Collections.Generic.HashSet[System.String]] @($MicrosoftDomains | Where-Object -FilterScript { -NOT ($AllowList.Contains($_)) })
 
-Write-Host -Object "$($DomainsNotInAllowList.Count) domains that are not in the allowlist" -ForegroundColor Yellow
+Write-Host -Object "$($DomainsNotInAllowList.Count) domain(s) that are not in the allowlist" -ForegroundColor Yellow
 
 # Loop through the domains that are not in the allowlist
 foreach ($Domain in $DomainsNotInAllowList) {
