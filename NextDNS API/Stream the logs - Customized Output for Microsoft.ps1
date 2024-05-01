@@ -1,93 +1,75 @@
 $ErrorActionPreference = 'Stop'
 
-# Make a new file to store the items that belong to Microsoft but are not in the Whitelisted domains list
-if (-NOT (Test-Path -Path .\NotWhitelisted.txt)) {
-    New-Item -ItemType File -Path .\NotWhitelisted.txt -Force | Out-Null
+# 1) Domains that belong to Microsoft but are not whitelisted
+# 2) Domains possibly belong to Microsoft but got blocked
+# 3) All contacted domains, excluding the domains stored in other Microsoft related lists and blocked domains
+foreach ($File in 'NotWhitelisted.txt', 'MicrosoftPossibleBlocked.txt', 'AllDomains.txt') {
+    if (-NOT (Test-Path -Path ".\$File")) {
+        New-Item -ItemType File -Path ".\$File" -Force | Out-Null
+    }
 }
 
-# Make a new file to store the items that possibly belong to Microsoft but got blocked
-if (-NOT (Test-Path -Path .\MicrosoftPossibleBlocked.txt)) {
-    New-Item -ItemType File -Path .\MicrosoftPossibleBlocked.txt -Force | Out-Null
-}
-
-# Make a new file to store all of the domains that were connected to, no duplicates. Excluding the domains stored in other Microsoft related lists and blocked domains
-if (-NOT (Test-Path -Path .\AllDomains.txt)) {
-    New-Item -ItemType File -Path .\AllDomains.txt -Force | Out-Null
-}
-
-# Make a new file to store all of the domains that were connected to, with their counts as a hashtable. Excluding the domains stored in other Microsoft related lists and blocked domains
+# a file to store all of the domains that were connected to, with their counts as a hashtable. Excluding the domains stored in other Microsoft related lists and blocked domains
 if (-NOT (Test-Path -Path .\AllDomainsCount.txt)) {
     New-Item -ItemType File -Path .\AllDomainsCount.txt -Force | Out-Null
-
     # Create an empty ordered hashtable to store the domains and their counts
     $DomainCount = [System.Management.Automation.OrderedHashtable]::new()
 }
-# If the file and hashtable already exists, read it
+# If the file already exists, convert it to JSON and read it as hashtable
 else {
-    # Read the JSON string from the file and convert it to a hashtable
     [System.Management.Automation.OrderedHashtable]$DomainCount = Get-Content -Path '.\AllDomainsCount.txt' | ConvertFrom-Json -AsHashtable
+}
+
+# a file to store all of the blocked domains that were connected to, with their counts as a hashtable
+if (-NOT (Test-Path -Path .\AllBlockedCount.txt)) {
+    New-Item -ItemType File -Path .\AllBlockedCount.txt -Force | Out-Null
+    $BlockedCount = [System.Management.Automation.OrderedHashtable]::new()
+}
+# If the file already exists, convert it to JSON and read it as hashtable
+else {
+    [System.Management.Automation.OrderedHashtable]$BlockedCount = Get-Content -Path '.\AllBlockedCount.txt' | ConvertFrom-Json -AsHashtable
 }
 
 # Try-Finally to loop through the stream and process each line as a JSON object
 try {
 
     # Read the Whitelisted Domains, it's always located here: https://github.com/HotCakeX/MicrosoftDomains/blob/main/Microsoft%20Domains.txt
-    [System.String[]]$WhiteListedDomains = Get-Content -Path '.\Microsoft Domains.txt'
+    $WhiteListedDomains = [System.Collections.Generic.HashSet[System.String]] @(Get-Content -Path '.\Microsoft Domains.txt')
 
-    # Define the API key and the profile ID
-    # These are the credentials that you need to access the NextDNS API
-    # Get your API key from here: https://my.nextdns.io/account
+    # Define the API key and the profile ID to access the NextDNS API - https://my.nextdns.io/account
     [System.String]$ApiKey = ''
     [System.String]$ProfileId = ''
 
-    # Define the URL for streaming the logs
-    # This is the endpoint that you need to send a web request to get the logs as a SSE stream
-    # https://nextdns.github.io/api/#streaming
+    # Define the endpoint that you need to send a web request to get the logs as a SSE stream - https://nextdns.github.io/api/#streaming
     [System.Uri]$URL = "https://api.nextdns.io/profiles/$ProfileId/logs/stream"
 
-    # Create a header with the API key as a hashtable
-    # This is a key-value pair that you need to include in the web request to authenticate yourself
-    [System.Collections.Hashtable]$Header = @{
-        'X-Api-Key' = $ApiKey
-    }
     # Create an empty NameValueCollection
     # This is a special type of collection that can store multiple values for each key, and it is used by the web request object to set the header
     $HeaderNVC = [System.Collections.Specialized.NameValueCollection]::new()
 
-    # Loop over the hashtable keys and values and add them to the NameValueCollection
-    # This is a way of converting the hashtable to a NameValueCollection, by iterating over each key and value and adding them to the collection
-    foreach ($key in $Header.Keys) {
-        $Value = $Header[$key]
-        $HeaderNVC.Add($key, $Value)
-    }
+    # Add the X-Api-Key header for authentication to the NameValueCollection
+    $HeaderNVC.Add('X-Api-Key', $ApiKey)
 
-    # Create a web request object
-    # This is an object that represents a HTTP request that can be sent to a server and get a response
+    # Create a web request object that represents a HTTP request that can be sent to a server and get a response
     $WebRequest = [System.Net.HttpWebRequest]::Create($URL)
 
-    # Set the header with the API key
-    # This is a way of adding the header to the web request object, by using the NameValueCollection that we created earlier
+    # Adding the header to the web request object
     $WebRequest.Headers.Add($HeaderNVC)
 
-    # Set the timeout to infinite
-    # This is a way of telling the web request object to wait indefinitely for a response, because we are expecting a continuous stream of data from the server
+    # Set the timeout to infinite, tells the web request object to wait indefinitely for a response, because we are expecting a continuous stream of data from the server
     $WebRequest.Timeout = -1
 
-    # Get the web response object
-    # This is an object that represents a HTTP response that is received from the server after sending the web request
+    # Get the web response (HTTP response) object from the server
     [System.Net.HttpWebResponse]$Response = $WebRequest.GetResponse()
 
-    # Get the response stream
-    # This is an object that represents a stream of data that is sent by the server as part of the response, and it can be read line by line using a stream reader object
+    # Get the response stream, represents a stream of data that is sent by the server as part of the response, and it can be read line by line using a stream reader object
     $ResponseStream = $Response.GetResponseStream()
 
-    # Create a stream reader object
-    # This is an object that can read data from a stream, such as the response stream, and convert it to text
+    # Create a stream reader object that can read data from a stream, such as the response stream, and convert it to text
     $StreamReader = [System.IO.StreamReader]::new($ResponseStream)
 
     while ($true) {
-        # Read one line from the stream
-        # This is a way of getting one line of text from the stream reader object, which corresponds to one event from the server
+        # Read one line from the stream, which corresponds to one event from the server
         $Line = $StreamReader.ReadLine()
 
         # Split the line by colon and space characters
@@ -97,20 +79,16 @@ try {
         # Check if the line has two parts
         # This is a way of validating that the line has both a prefix and a JSON data, and not something else. We use the Count property of the array to check this.
         if ($Parts.Count -eq 2) {
-            # Use the second part as the JSON data
-            # This is a way of getting only the JSON data from the line, by using index 1 of the array (index 0 is for prefix)
+            # Use the second part so we only get the JSON data from the line (index 0 is for prefix)
             $JsonData = $Parts[1]
 
             # Check if the JSON data is not empty
-            # This is a way of validating that there is some data in the JSON part, and not just an empty string. We use the -ne operator to compare the JSON data with an empty string.
             if ($JsonData -ne '') {
 
-                # Remove any characters from the beginning of the JSON data that may make it invalid or malformed
-                # This is a way of fixing the JSON data if it has some extra characters at the beginning, such as colon or space, that may prevent it from being parsed as a JSON object.
+                # Remove any characters from the beginning of the JSON data that may make it invalid or malformed such as colon or space
                 $JsonData = $JsonData.TrimStart(': ')
 
                 # Test if the JSON data is a valid JSON object using the Test-Json cmdlet
-                # Using the -ErrorAction SilentlyContinue parameter to suppress any error messages and return false instead.
                 [System.Boolean]$IsValidJson = Test-Json -Json $JsonData -ErrorAction SilentlyContinue
 
                 # Check if the JSON data is a valid JSON object
@@ -118,10 +96,6 @@ try {
 
                     # Convert the JSON data to a hashtable
                     [System.Management.Automation.OrderedHashtable]$Log = $JsonData | ConvertFrom-Json -AsHashtable
-
-                    # Select only the properties that you are interested in
-                    # This is a way of filtering the hashtable and getting only the properties that you want
-                    # $Log = $Log | Select-Object timestamp, domain, root, clientIp, status | Format-Table
 
                     # Making sure the root in the log is actually the root domain and not a sub-domain
                     # Sometimes it identifies sub-domains as root domains, so here we make sure it doesn't happen
@@ -166,24 +140,25 @@ try {
                             $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                             # Make sure the domain isn't already available in the file
-                            [System.String[]]$CurrentItemsMicrosoft = Get-Content -Path '.\MicrosoftPossibleBlocked.txt' -Force
+                            $CurrentItemsMicrosoft = [System.Collections.Generic.HashSet[System.String]] @(Get-Content -Path '.\MicrosoftPossibleBlocked.txt' -Force)
 
                             # Add the Blocked domain to the MicrosoftPossibleBlocked.txt list for later review
-                            if ($RootDomain -notin $CurrentItemsMicrosoft) {
+                            if (-NOT $CurrentItemsMicrosoft.Contains($RootDomain)) {
                                 Add-Content -Value $RootDomain -Path '.\MicrosoftPossibleBlocked.txt' -Force
                             }
                         }
                         # If the domain was not blocked but also wasn't in the Microsoft domains Whitelist
-                        elseif ($RootDomain -notin $WhiteListedDomains) {
+                        elseif (-NOT $WhiteListedDomains.Contains($RootDomain)) {
+
                             # Display it with cyan text on the console
                             Write-Host -Object 'Microsoft Domain Not Whitelisted' -ForegroundColor Cyan
                             $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                             # Make sure the domain isn't already available in the NotWhitelisted.Txt file
-                            [System.String[]]$CurrentItemsNotWhitelisted = Get-Content -Path '.\NotWhitelisted.txt' -Force
+                            $CurrentItemsNotWhitelisted = [System.Collections.Generic.HashSet[System.String]] @(Get-Content -Path '.\NotWhitelisted.txt' -Force)
 
                             # Add the detected domain to the NotWhitelisted.Txt list for later review
-                            if ($RootDomain -notin $CurrentItemsNotWhitelisted) {
+                            if (-NOT $CurrentItemsNotWhitelisted.Contains($RootDomain)) {
                                 Add-Content -Value $RootDomain -Path '.\NotWhitelisted.txt' -Force
                             }
                         }
@@ -197,6 +172,19 @@ try {
                     elseif ($Log.status -eq 'blocked') {
                         Write-Host -Object 'BLOCKED' -ForegroundColor Red
                         $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
+
+                        # Check if the domain already exists in the blocked domains hashtable
+                        if ($BlockedCount.ContainsKey($RootDomain)) {
+                            # Increment its count by one
+                            $BlockedCount[$RootDomain] += 1
+                        }
+                        else {
+                            # Add it to the hashtable with a count of one
+                            $BlockedCount.Add($RootDomain, 1)
+                        }
+
+                        # Convert the hashtable to a JSON string and write it to .\AllBlockedCount.txt
+                        $BlockedCount | ConvertTo-Json | Set-Content -Path '.\AllBlockedCount.txt' -Force
                     }
                     # Display any allowed domain with green text on the console
                     else {
@@ -204,13 +192,12 @@ try {
                         $($Log | Select-Object -Property timestamp, domain, root, clientIp, status | Format-Table)
 
                         # if the domain is neither blocked, belongs to Microsoft nor is it in the whitelisted domains list
-                        if ($RootDomain -notin $WhiteListedDomains) {
+                        if (-NOT $WhiteListedDomains.Contains($RootDomain)) {
 
-                            # Get the content of the .\AllDomains.txt
-                            [System.String[]]$CurrentItemsAllDomains = Get-Content -Path '.\AllDomains.txt' -Force
+                            $CurrentItemsAllDomains = [System.Collections.Generic.HashSet[System.String]] @(Get-Content -Path '.\AllDomains.txt' -Force)
 
                             # Add the domain to .\AllDomains.txt , make sure it's unique and not already in the list
-                            if ($RootDomain -notin $CurrentItemsAllDomains) {
+                            if (-NOT $CurrentItemsAllDomains.Contains($RootDomain)) {
                                 Add-Content -Value $RootDomain -Path '.\AllDomains.txt' -Force
                             }
 
@@ -232,6 +219,9 @@ try {
             }
         }
     }
+}
+catch {
+    $_
 }
 finally {
     # If an error occurred while reading from the stream
