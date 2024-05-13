@@ -639,3 +639,4 @@ wmlalicensing.com
 msbill.info
 microsoftmerchandise.com
 microsoftrnd.co.il
+static.microsoft
