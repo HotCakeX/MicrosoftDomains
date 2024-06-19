@@ -57,6 +57,8 @@ bing.co
 bing.net
 live.de
 live.fr
+live.jp
+live.no
 skype.dk
 microsoft.dk
 microsoft.co
