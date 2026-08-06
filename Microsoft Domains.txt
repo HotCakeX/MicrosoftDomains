@@ -643,3 +643,4 @@ microsoftmerchandise.com
 microsoftrnd.co.il
 static.microsoft
 microsofticm.com
+tm-azurefd.net
